@@ -11,7 +11,10 @@ mod types;
 
 fn main() -> std::io::Result<()> {
     let matches = App::new("ftab-dump")
-        .version("1.0.0")
+        .version(
+            std::env::var("VMP4_DUMP_VERSION")
+                .unwrap_or("1.0.0".to_string()).as_str()
+        )
         .author("Kenan Sulayman <kenan@sig.dev>")
         .about("The best vmp4 dumper in town!")
         .arg(Arg::with_name("dump")
