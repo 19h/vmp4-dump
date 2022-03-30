@@ -2,6 +2,12 @@
 
 <h5 align="center">Dumps Apple VMP4 files, used by geod, GeoServices, Maps, and other Apple apps.</h5>
 
+<hr/>
+
+<h5 align="center">— HELP WANTED —<br/>If you can contribute parsers for individual section data, please do.</h5>
+
+<hr/>
+
 <div align="center">
   <a href="https://crates.io/crates/vmp4-dump">
     crates.io
@@ -21,36 +27,102 @@ $ vmp4-dump --verbose --dump tile.vf
 
 Example output:
 
-```shell script
-$ vmp4-dump --verbose --dump tile.vf
+```text
+$ vmp4-dump tile-0219ee.vf
 
-file size: 17917
-sections: 2
+file size: 1115
+sections: 11
 
 type: ChapterGlobal (1 / 1)
-offset: 30
+offset: 129
 size: 12
 
-0000: C0 01 50 40 E2 49 00                             ..P@.I.
+0000: 40 01 50 30 E2 01 00                             @.P0...
 
-type: ChapterDaVinciBuildings (8e / 142)
-offset: 42
-size: 17875
+type: ChapterLabels (a / 10)
+offset: 141
+size: 34
 
-0000: 14 00 00 00 0B 00 0B 00 C1 FF FF FF 20 D1 10 27  ...............'
-0016: C2 DF 18 45 0B 00 14 00 17 5D 04 00 DC 8C 01 CC  ...E.....]......
-0032: FF 00 00 00 01 00 00 00 00 00 18 00 00 00 00 81  ................
-0048: 20 35 F3 F8 00 00 0B 55 C7 37 07 20 15 19 C7 37  .5.....U.7.....7
-0064: 07 20 20 01 00 00 00 03 F0 10 4E 03 00 00 00 02  ..........N.....
-0080: C9 80 03 00 00 00 02 52 60 02 00 00 09 7B FE 30  .......R`....{.0
-0096: 00 D3 C0 29 C9 4F 5F 60 F0 63 07 5D C6 79 BD 47  ...).O_`.c.].y.G
-0112: 9C 3A 08 D3 AE 52 31 16 41 1D 65 E7 17 A9 75 AE  .:...R1.A.e...u.
-0128: 00 F8 BF 67 AD C9 53 AC 14 C4 9E 2F CE C8 2B 4F  ...g..S..../..+O
-0144: 23 C0 55 B9 AE 72 52 91 06 4D 24 63 8C 4B A8 BD  #.U..rR..M$c.K..
-0160: 0E BF 9E 47 14 6A 67 A1 05 9E 85 18 32 C4 3B D3  ...G.jg.....2.;.
-0176: 84 57 29 04 06 A8 3E F7 44 92 60 5A CA BC 1B 74  .W)...>.D.`Z...t
-0192: 37 98 4C 23 72 4B 1C 9C                          7.L#rK..
-..... 17866 more bytes .....
+0000: 64 7A 79 72 7A 65 63 7A 2D 57 79 62 75 64 6F 77  dzyrzecz-Wybudow
+0016: 61 6E 69 65 00 50 61 6B 6C 69 63 61 00           anie.Paklica.
+
+type: ChapterLabelLanguages (b / 11)
+offset: 175
+size: 7
+
+0000: 6C 00                                            l.
+
+type: ChapterLabelLocalizations2 (d / 13)
+offset: 182
+size: 23
+
+0000: 6C 00 03 01 50 4C 00 00 00 01 01 01 01 01 01 02  l...PL..........
+0016: 88 88                                            ..
+
+type: ChapterVertices (14 / 20)
+offset: 205
+size: 10
+
+0000: 59 C4 90 60 00                                   Y..`.
+
+type: ChapterPointFeatures (1e / 30)
+offset: 215
+size: 36
+
+0000: 01 00 00 A4 1E CD EE 41 7A 65 2B B2 00 00 60 41  .......Aze+...`A
+0016: 04 04 BA 01 06 04 0A 00 55 0E 00 00 00 00 00     ........U......
+
+type: ChapterVertices (14 / 20)
+offset: 251
+size: 77
+
+0000: 00 03 56 F6 C3 D8 DE 71 4C F4 00 F1 FA 80 B8 FE  ..V....qL.......
+0016: 81 18 FB 80 9C F9 40 A8 F7 80 FC F2 03 74 C1 82  ......@......t..
+0032: 1C C9 70 10 FF 01 85 EB 01 F8 F0 00 44 FC 42 9C  ..p.........D.B.
+0048: EA 02 04 EC 40 28 FF 40 58 00 80 78 02 C6 51 36  ....@(.@X..x..Q6
+0064: 00 38 01 C0 58 00 C0 00                          .8..X...
+
+type: ChapterLineFeatures (1f / 31)
+offset: 328
+size: 22
+
+0000: 00 01 10 19 00 02 04 01 0C 04 BA 01 0A 01 5E 00  ..............^.
+0016: 00                                               .
+
+type: ChapterVertices (14 / 20)
+offset: 350
+size: 675
+
+0000: 04 E3 01 34 74 00 02 46 32 B8 00 0B 73 DF FF 00  ...4t..F2...s...
+0016: 00 00 07 9C FE F3 02 67 FD D0 04 BF DD 00 33 FD  .......g......3.
+0032: D0 01 7F DE FF EF F7 6F F1 BE E8 03 4B FE 00 04  .......o....K...
+0048: 7F DE 00 1B FD FF FE BF E0 FF BF EE 8F CB BE BA  ................
+0064: 03 2B FD 50 11 7F 3D 00 03 FD EF E0 FF B7 FE 53  .+.P..=........S
+0080: E4 40 2E 3F B7 00 C7 FE B0 00 3F EF FD 53 FE 6F  .@.?......?..S.o
+0096: F2 3F EC FF 93 FC 9F F4 FF 3E FE 3B FD DF FB 3F  .?.......>.;...?
+0112: D8 FF B3 FD 6F FC 3F A5 FF B3 F5 FF FF 3F A2 FF  ....o.?......?..
+0128: F7 FA 0F FD 3F D4 FF D3 F6 3F EB BE FE FE A3 F3  ....?....?......
+0144: CF E6 BF D6 FF BF FA 5F FB 7D CB FF E3 FA 8F FD  ......._.}......
+0160: 7F F8 FF FF FD 3F FD 3C F6 F9 6F F8 3F F3 7F 6B  .....?.<..o.?..k
+0176: FF 6F FD 2F FA BF C7 FE 14 1C DF DD 7A F7 FA 3B  .o./........z..;
+0192: FB 1F EA BF CB FD F7 FE                          ........
+..... 475 more bytes .....
+
+
+type: ChapterPolygonFeatures (20 / 32)
+offset: 1025
+size: 53
+
+0000: 00 08 02 1B 07 47 02 00 00 88 03 01 47 0D 00 80  .....G......G...
+0016: 24 30 E8 02 67 70 34 18 C4 6E B6 12 16 A0 5B 60  $0..gp4..n....[`
+0032: D1 70 23 68 50 63 A3 BA DB 04 5A 8C 2D 83 40 00  .p#hPc....Z.-.@.
+
+type: ChapterPolygonPointCharacteristics (34 / 52)
+offset: 1078
+size: 37
+
+0000: 02 00 05 00 02 00 01 02 00 02 02 00 11 02 00 16  ................
+0016: 02 00 01 03 01 82 00 01 02 02 00 01 82 00 02 00  ................
 ```
 
 #### Special thanks
