@@ -34,7 +34,6 @@ jobs:
           # mips for big-endian coverage.)
           - nightly
           - nightly-musl
-          - nightly-32
           - nightly-arm
           - macos
           - win-msvc
@@ -56,10 +55,6 @@ jobs:
             os: ubuntu-18.04
             rust: nightly
             target: x86_64-unknown-linux-musl
-          - build: nightly-32
-            os: ubuntu-18.04
-            rust: nightly
-            target: i686-unknown-linux-gnu
           - build: nightly-arm
             os: ubuntu-18.04
             rust: nightly
