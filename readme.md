@@ -64,6 +64,58 @@ size: 17875
   of the private framework GeoServices.framework extracted
   from the arm64e dyld cache of MacOS 12.3 (21E230).
 
+#### Known VectorTile Section Types (MacOS 12.3, 21E230, arm64e)
+
+```rust
+10 => ChapterLabels,
+0xb => ChapterLabelLanguages,
+0xd => ChapterLabelLocalizations2,
+0x14 => ChapterVertices,
+0x1e => ChapterPointFeatures,
+0x1f => ChapterLineFeatures,
+0x20 => ChapterPolygonFeatures,
+0x21 => ChapterBuildingFeatures,
+0x22 => ChapterCoastlineFeatures,
+0x26 => ChapterWrappingCoastlineFeatures,
+0x27 => ChapterBuildingMeshes,
+0x33 => ChapterLinePointCharacteristics,
+0x34 => ChapterPolygonPointCharacteristics,
+0x37 => ChapterPolygonPointLabelPositions,
+0x3c => ChapterConnectivity,
+0x50 => ChapterGeoIDSegments,
+0x5a => ChapterAddressRanges,
+0x5d => ChapterTileReferences,
+0x60 => ChapterHighResBuildings,
+100 => ChapterDebugBlob,
+0x65 => ChapterElevationRaster,
+0x66 => ChapterStyleAttributeRaster,
+0x67 => ChapterDaVinciMetadata,
+0x68 => ChapterLowResBuildings,
+0x70 => ChapterTransitMZROverride,
+0x77 => ChapterCoverage,
+0x80 => ChapterTransitSystems,
+0x81 => ChapterTransitNetwork,
+0x87 => ChapterRoadNetwork,
+0x88 => ChapterVenueMZROverride,
+0x89 => ChapterVenues,
+0x8a => ChapterStorefronts,
+0x8b => ChapterLowResBorderBuildings,
+0x8c => ChapterBorderBuildingMeshes,
+0x8d => ChapterLabelPlacementMetadata,
+0x8e => ChapterDaVinciBuildings,
+0x90 => ChapterPointFeaturesAddendum,
+0x91 => ChapterLinesExtended,
+0x92 => ChapterTrafficSkeleton1,
+0x93 => ChapterDaVinciLandmarks,
+0x94 => ChapterLineWidths1,
+0x95 => ChapterPointLabelAnnotations,
+0x97 => ChapterPOIMzrOverrides,
+0x98 => ChapterTrafficSkeleton2,
+0x99 => ChapterLineWidths2,
+0x9a => ChapterStyleAttributeRaster2,
+0x9b => ChapterMaterialRaster,
+```
+
 #### License
 
 ~~ MIT License ~~
