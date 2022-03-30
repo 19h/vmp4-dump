@@ -1,6 +1,6 @@
 [package]
 name = "vmp4-dump"
-version = "1.0.2"
+version = "1.0.3-alpha.0"
 authors = ["Kenan Sulayman <kenan@sig.dev>"]
 license = "MIT"
 description = "Dumps Apple VMP4 files, used by geod, GeoServices, Maps, and other Apple apps."
