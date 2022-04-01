@@ -43,8 +43,9 @@ type: ChapterLabels (a / 10)
 offset: 141
 size: 34
 
-0000: 64 7A 79 72 7A 65 63 7A 2D 57 79 62 75 64 6F 77  dzyrzecz-Wybudow
-0016: 61 6E 69 65 00 50 61 6B 6C 69 63 61 00           anie.Paklica.
+labels: (2)
+  - dzyrzecz-Wybudowanie
+  - Paklica
 
 type: ChapterLabelLanguages (b / 11)
 offset: 175
