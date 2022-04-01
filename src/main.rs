@@ -1,13 +1,17 @@
 #![allow(unused_imports)]
 #![allow(dead_code)]
 
+extern crate clap;
+
 use std::path::Path;
 
-extern crate clap;
-use clap::{Arg, App};
+use clap::{App, Arg};
 
 mod vmp4_parser;
+mod vmp4_section;
+mod vmp4_section_print;
 mod types;
+mod sections;
 
 fn main() -> std::io::Result<()> {
     let matches = App::new("ftab-dump")
@@ -64,23 +68,11 @@ fn main() -> std::io::Result<()> {
         println!("size: {:?}", section.size);
         println!();
 
-        let mut dumper = Vec::new();
-
-        hxdmp::hexdump(
-            if verbose {
-                &section_data
-            } else {
-                &section_data[..200.min(section_data.len())]
-            },
-            &mut dumper,
+        vmp4_section_print::print_section_data(
+            &section_data,
+            &section.envelope,
+            verbose,
         );
-
-        println!("{}", String::from_utf8(dumper).unwrap());
-
-        if !verbose && section_data.len() > 200 {
-            println!("..... {} more bytes .....", section_data.len() - 200);
-            println!();
-        }
 
         if dump {
             std::fs::write(

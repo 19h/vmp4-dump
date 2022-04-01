@@ -2,7 +2,9 @@ use std::cmp::Ordering;
 use std::io::{Read, Seek};
 
 use byteorder::{BigEndian, LittleEndian, ReadBytesExt};
+
 use crate::types::{parse_section_type, Vmp4SectionType};
+use crate::vmp4_section::Vmp4Section;
 
 #[inline]
 fn read_vec<R>(file: &mut R, len: usize) -> Result<Vec<u8>, std::io::Error>
@@ -96,35 +98,6 @@ impl Vmp4Data {
 }
 
 #[derive(Debug)]
-pub struct Vmp4Section {
-    pub section_type: Vmp4SectionType,
-    pub type_id: u16,
-    pub offset: u32,
-    pub size: u32,
-    pub data: Option<Vec<u8>>
-}
-
-impl Vmp4Section {
-    pub fn parse(buf: &[u8]) -> Result<Vmp4Section, std::io::Error> {
-        let mut file = std::io::Cursor::new(buf);
-
-        let type_id = file.read_u16::<LittleEndian>()?;
-        let offset = file.read_u32::<LittleEndian>()?;
-        let size = file.read_u32::<LittleEndian>()?;
-
-        Ok(
-            Vmp4Section {
-                section_type: parse_section_type(type_id),
-                type_id,
-                offset,
-                size,
-                data: None,
-            }
-        )
-    }
-}
-
-#[derive(Debug)]
 pub struct Vmp4 {
     pub tag: String,
     pub sections: Vec<Vmp4Section>,
@@ -185,6 +158,8 @@ pub fn parse_vmp4<R>(src: &mut R) -> std::io::Result<Vmp4>
         section.data = Some(
             vmp4_data.buf,
         );
+
+        section.parse_data();
     }
 
     let vmp4 = Vmp4 {
