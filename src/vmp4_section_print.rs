@@ -1,4 +1,4 @@
-use crate::sections::chapterlabel::ChapterLabel;
+use crate::sections::chapterlabel::ChapterLabels;
 use crate::types::Vmp4SectionType;
 use crate::vmp4_section;
 use crate::vmp4_section::Vmp4SectionData;
@@ -30,22 +30,11 @@ pub fn print_section_data(
         return;
     }
 
-    let envelope =
-        section_envelope.as_ref().unwrap();
-
-    match envelope {
-        Vmp4SectionData::ChapterLabels(
-            ChapterLabel {
-                labels,
-            },
-        ) => {
-            println!("labels: ({})", labels.len());
-
-            for entry in labels.iter() {
-                println!("  - {}", entry);
-            }
-        }
-    }
+    section_envelope
+        .as_ref()
+        .map(|envelope|
+            envelope.print(),
+        );
 
     return;
 }

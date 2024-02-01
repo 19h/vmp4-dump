@@ -13,10 +13,10 @@ path = "src/main.rs"
 name = "vmp4-dump"
 
 [dependencies]
-byteorder = "1.4.3"
-clap = "3.1.6"
-flate2 = "1.0.22"
-hxdmp = "0.2.1"
+byteorder = "^1.5"
+clap = "^4"
+flate2 = "^1.0"
+hxdmp = "^0.2"
 
 [profile]
 

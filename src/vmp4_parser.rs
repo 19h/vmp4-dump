@@ -23,7 +23,7 @@ fn read_str<R>(file: &mut R, len: usize) -> Result<String, std::io::Error>
 {
     Ok(
         String::from_utf8(
-            read_vec(file, 4)?
+            read_vec(file, len)?
                 .to_vec()
         )
             .unwrap_or(String::new())
@@ -38,27 +38,31 @@ fn cmp_str(buf: &Vec<u8>, sstr: &[u8]) -> bool {
 #[derive(Debug)]
 pub struct Vmp4Data {
     pub compressed: bool,
+    pub original_size: u32,
     pub size: u32,
     pub buf: Vec<u8>,
 }
 
 impl Vmp4Data {
-    pub fn new(compressed: bool, size: u32, buf: Vec<u8>) -> Vmp4Data {
-        Vmp4Data {
-            compressed,
-            size,
-            buf,
-        }
-    }
-
     // static method that parses a &[u8] into a Vmp4Data struct
     // which contains a 1 bytes gzip flag, 4 byte size, and all other bytes the data.
 
-    pub fn parse(buf: &[u8]) -> Result<Vmp4Data, std::io::Error> {
+    pub fn parse(
+        buf: &[u8],
+    ) -> Result<Vmp4Data, std::io::Error> {
         let mut file = std::io::Cursor::new(buf);
 
+        let original_size = buf.len();
+
         let compressed = file.read_u8()? != 0;
-        read_vec(&mut file, 4)?;
+        
+        let decompressed_size =
+            if compressed {
+                //dbg!(read_vec(&mut file, 4)?);
+                file.read_u32::<LittleEndian>()?
+            } else {
+                0
+            };
 
         let pos = file.position();
 
@@ -87,12 +91,22 @@ impl Vmp4Data {
                 data
             };
 
+        if decompressed_size != 0 && decompressed_size != data.len() as u32 {
+            return Err(
+                std::io::Error::new(
+                    std::io::ErrorKind::Other,
+                    "Decompressed size does not match data size",
+                )
+            );
+        }
+
         Ok(
-            Vmp4Data::new(
+            Vmp4Data {
                 compressed,
-                0,
-                data,
-            )
+                original_size: original_size as u32,
+                size: data.len() as u32,
+                buf: data,
+            }
         )
     }
 }
@@ -125,41 +139,33 @@ pub fn parse_vmp4<R>(src: &mut R) -> std::io::Result<Vmp4>
     let num_sections = src.read_u16::<LittleEndian>()?;
     offset += 2;
 
-    // Each section's information (10 bytes) which contains a 2 bytes type field, 4 byte offset location, and 4 byte size.
+    // Each section header (10 bytes) which contains a 2 bytes type field, 4 byte offset location, and 4 byte size.
     let mut sections = Vec::new();
 
     for _ in 0..num_sections {
+        let section_header =
+            &read_vec(
+                src,
+                10,
+            )?[..];
+
         let section =
             Vmp4Section::parse(
-                &read_vec(src, 10)?[..],
+                src,
+                section_header,
             )?;
+
+        offset += 10;
+
+        src.seek(
+            std::io::SeekFrom::Start(
+                offset as u64,
+            ),
+        )?;
 
         sections.push(
             section,
         );
-
-        offset += 10;
-    }
-
-    for section in sections.iter_mut() {
-        src.seek(std::io::SeekFrom::Start(section.offset as u64))?;
-
-        let data =
-            read_vec(
-                src,
-                section.size as usize,
-            )?;
-
-        let vmp4_data =
-            Vmp4Data::parse(
-                &data,
-            )?;
-
-        section.data = Some(
-            vmp4_data.buf,
-        );
-
-        section.parse_data();
     }
 
     let vmp4 = Vmp4 {
