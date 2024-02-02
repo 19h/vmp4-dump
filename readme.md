@@ -28,102 +28,98 @@ $ vmp4-dump --verbose --dump tile.vf
 Example output:
 
 ```text
-$ vmp4-dump tile-0219ee.vf
+$ vmp4-dump tile-0f782e.vf
 
-file size: 1115
-sections: 11
+file size: 538
+sections: 8
 
-type: ChapterGlobal (1 / 1)
-offset: 129
-size: 12
+type: ChapterGlobal (0x1 / 1)
+compressed: false
+offset: 0x60
+size: 11
 
-0000: 40 01 50 30 E2 01 00                             @.P0...
+0000: 47 00 04 59 00 00 A8 00 D2 14 00                 G..Y.......
 
-type: ChapterLabels (a / 10)
-offset: 141
-size: 34
+type: ChapterLabels (0xa / 10)
+compressed: false
+offset: 0x6c
+size: 47
 
-labels: (2)
-  - dzyrzecz-Wybudowanie
-  - Paklica
+labels: (5)
+  - Kuligowo
+  - Lubosinek
+  - Marianowo
+  - Policko
+  - Żółwin
 
-type: ChapterLabelLanguages (b / 11)
-offset: 175
-size: 7
+type: ChapterLabelLanguages (0xb / 11)
+compressed: false
+offset: 0x9c
+size: 6
 
-0000: 6C 00                                            l.
+languages: (1)
+  - /pl
 
-type: ChapterLabelLocalizations2 (d / 13)
-offset: 182
-size: 23
+type: ChapterLabelLocalizations2 (0xd / 13)
+compressed: false
+offset: 0xa3
+size: 25
 
-0000: 6C 00 03 01 50 4C 00 00 00 01 01 01 01 01 01 02  l...PL..........
-0016: 88 88                                            ..
+0000: 02 03 01 70 6C 00 03 01 50 4C 00 00 00 01 01 01  ...pl...PL......
+0016: 01 01 01 05 88 88 88 88 88                       .........
 
-type: ChapterVertices (14 / 20)
-offset: 205
-size: 10
+type: ChapterVertices (0x14 / 20)
+compressed: false
+offset: 0xbd
+size: 217
 
-0000: 59 C4 90 60 00                                   Y..`.
+0000: 13 5E 28 44 00 0E C9 39 38 A2 38 A1 33 03 C8 67  .^(D...98.8.3..g
+0016: D0 1C F7 21 3C A2 0D C2 63 32 3B 00 0F BE E3 09  ...!<...c2;.....
+0032: 44 8E A6 51 2B 20 EF F9 B9 C7 70 DD 3F 2F EE BF  D..Q+.....p.?/..
+0048: 9F DE E6 6D 3A 7F DF 6F DF E9 FA F6 FE FF 3D 7F  ...m:..o......=.
+0064: 97 73 C3 82 FA F9 7F 3B EF E5 9C 38 7A 58 53 1F  .s.....;...8zXS.
+0080: A1 7E E1 20 82 9F 01 DD 63 F9 2E 9C C5 DF 62 9F  .~......c.....b.
+0096: E6 43 09 44 8F D8 7D F4 1F 8B F6 2E 74 5A C8 FE  .C.D..}.....tZ..
+0112: 43 73 09 CC 05 9F 07 25 F0 2D 85 00 00 90 6C 4C  Cs.....%.-....lL
+0128: E1 74 37 40 48 5E 4B DB 6F C0 E3 0E 2D 27 57 9A  .t7@H^K.o...-'W.
+0144: C6 52 F9 F0 04 FF C0 A0 62 2B 7C 1C 54 20 BA 7B  .R......b+|.T..{
+0160: 9F 62 86 2C 9D A0 80 F8 2D 87 45 34 74 94 20 0A  .b.,....-.E4t...
+0176: 00 28 18 04 85 88 1A 7A 0D B1 EE E0 B3 94 99 F6  .(.....z........
+0192: 6F DE 3D B9 6A 95 D7 B8                          o.=.j...
+..... 17 more bytes .....
 
-type: ChapterPointFeatures (1e / 30)
-offset: 215
+
+type: ChapterLineFeatures (0x1f / 31)
+compressed: true
+offset: 0x197
+size: 124
+original size: 75
+
+0000: 04 00 10 00 00 12 10 25 00 22 37 03 04 01 03 04  .......%."7.....
+0016: BA 01 0E 00 15 00 00 00 80 02 10 13 00 20 37 03  ..............7.
+0032: 10 00 00 20 37 03 10 25 00 20 37 03 10 00 00 20  ....7..%..7.....
+0048: 37 03 10 00 00 20 37 03 10 25 00 20 37 03 10 25  7.....7..%..7..%
+0064: 00 20 37 03 10 09 00 20 37 03 10 1D 00 20 37 03  ..7.....7.....7.
+0080: 10 25 00 20 37 03 10 00 00 20 37 03 10 1D 00 20  .%..7.....7.....
+0096: 37 03 10 25 00 20 37 03 10 00 00 22 34 03 01 01  7..%..7...."4...
+0112: 06 00 10 25 00 20 34 03 00 20 34 03              ...%..4...4.
+
+type: ChapterLinePointCharacteristics (0x33 / 51)
+compressed: false
+offset: 0x1e2
 size: 36
 
-0000: 01 00 00 A4 1E CD EE 41 7A 65 2B B2 00 00 60 41  .......Aze+...`A
-0016: 04 04 BA 01 06 04 0A 00 55 0E 00 00 00 00 00     ........U......
+0000: FF FF 03 06 06 00 01 00 02 00 07 01 00 02 00 09  ................
+0016: 01 01 02 00 0D 01 01 02 00 0E 01 01 02 00 10 01  ................
+0032: 07 02 00 00                                      ....
 
-type: ChapterVertices (14 / 20)
-offset: 251
-size: 77
+type: Unknown (0x7a / 122)
+compressed: false
+offset: 0x207
+size: 18
 
-0000: 00 03 56 F6 C3 D8 DE 71 4C F4 00 F1 FA 80 B8 FE  ..V....qL.......
-0016: 81 18 FB 80 9C F9 40 A8 F7 80 FC F2 03 74 C1 82  ......@......t..
-0032: 1C C9 70 10 FF 01 85 EB 01 F8 F0 00 44 FC 42 9C  ..p.........D.B.
-0048: EA 02 04 EC 40 28 FF 40 58 00 80 78 02 C6 51 36  ....@(.@X..x..Q6
-0064: 00 38 01 C0 58 00 C0 00                          .8..X...
-
-type: ChapterLineFeatures (1f / 31)
-offset: 328
-size: 22
-
-0000: 00 01 10 19 00 02 04 01 0C 04 BA 01 0A 01 5E 00  ..............^.
-0016: 00                                               .
-
-type: ChapterVertices (14 / 20)
-offset: 350
-size: 675
-
-0000: 04 E3 01 34 74 00 02 46 32 B8 00 0B 73 DF FF 00  ...4t..F2...s...
-0016: 00 00 07 9C FE F3 02 67 FD D0 04 BF DD 00 33 FD  .......g......3.
-0032: D0 01 7F DE FF EF F7 6F F1 BE E8 03 4B FE 00 04  .......o....K...
-0048: 7F DE 00 1B FD FF FE BF E0 FF BF EE 8F CB BE BA  ................
-0064: 03 2B FD 50 11 7F 3D 00 03 FD EF E0 FF B7 FE 53  .+.P..=........S
-0080: E4 40 2E 3F B7 00 C7 FE B0 00 3F EF FD 53 FE 6F  .@.?......?..S.o
-0096: F2 3F EC FF 93 FC 9F F4 FF 3E FE 3B FD DF FB 3F  .?.......>.;...?
-0112: D8 FF B3 FD 6F FC 3F A5 FF B3 F5 FF FF 3F A2 FF  ....o.?......?..
-0128: F7 FA 0F FD 3F D4 FF D3 F6 3F EB BE FE FE A3 F3  ....?....?......
-0144: CF E6 BF D6 FF BF FA 5F FB 7D CB FF E3 FA 8F FD  ......._.}......
-0160: 7F F8 FF FF FD 3F FD 3C F6 F9 6F F8 3F F3 7F 6B  .....?.<..o.?..k
-0176: FF 6F FD 2F FA BF C7 FE 14 1C DF DD 7A F7 FA 3B  .o./........z..;
-0192: FB 1F EA BF CB FD F7 FE                          ........
-..... 475 more bytes .....
-
-
-type: ChapterPolygonFeatures (20 / 32)
-offset: 1025
-size: 53
-
-0000: 00 08 02 1B 07 47 02 00 00 88 03 01 47 0D 00 80  .....G......G...
-0016: 24 30 E8 02 67 70 34 18 C4 6E B6 12 16 A0 5B 60  $0..gp4..n....[`
-0032: D1 70 23 68 50 63 A3 BA DB 04 5A 8C 2D 83 40 00  .p#hPc....Z.-.@.
-
-type: ChapterPolygonPointCharacteristics (34 / 52)
-offset: 1078
-size: 37
-
-0000: 02 00 05 00 02 00 01 02 00 02 02 00 11 02 00 16  ................
-0016: 02 00 01 03 01 82 00 01 02 02 00 01 82 00 02 00  ................
+0000: 1C 00 05 00 01 00 01 01 00 02 01 00 03 01 00 04  ................
+0016: 01 00                                            ..
 ```
 
 #### Special thanks
@@ -133,67 +129,79 @@ size: 37
 #### Notes
 
 - `cargo` requires a rust installation.
-- Most of this inferred from the decompilation by Ghidra
-  of the private framework GeoServices.framework extracted
-  from the arm64e dyld cache of MacOS 12.3 (21E230).
+- Most of this inferred from the decompilation by Ghidra, IDA,
+  Binary Ninja, Hopper, and Iaito, of the private framework
+  GeoServices.framework extracted from the arm64 dyld cache
+  of MacOS 14.1 (23B5067a).
 
-#### Known VectorTile Section Types (MacOS 12.3, 21E230, arm64e)
+#### Known VectorTile Section Types (MacOS 14.1, 23B5067a, arm64)
 
 ```rust
-10 => ChapterLabels,
-0xb => ChapterLabelLanguages,
-0xd => ChapterLabelLocalizations2,
-0x14 => ChapterVertices,
-0x1e => ChapterPointFeatures,
-0x1f => ChapterLineFeatures,
-0x20 => ChapterPolygonFeatures,
-0x21 => ChapterBuildingFeatures,
-0x22 => ChapterCoastlineFeatures,
-0x26 => ChapterWrappingCoastlineFeatures,
-0x27 => ChapterBuildingMeshes,
-0x33 => ChapterLinePointCharacteristics,
-0x34 => ChapterPolygonPointCharacteristics,
-0x37 => ChapterPolygonPointLabelPositions,
-0x3c => ChapterConnectivity,
-0x50 => ChapterGeoIDSegments,
-0x5a => ChapterAddressRanges,
-0x5d => ChapterTileReferences,
-0x60 => ChapterHighResBuildings,
-100 => ChapterDebugBlob,
-0x65 => ChapterElevationRaster,
-0x66 => ChapterStyleAttributeRaster,
-0x67 => ChapterDaVinciMetadata,
-0x68 => ChapterLowResBuildings,
-0x70 => ChapterTransitMZROverride,
-0x77 => ChapterCoverage,
-0x80 => ChapterTransitSystems,
-0x81 => ChapterTransitNetwork,
-0x87 => ChapterRoadNetwork,
-0x88 => ChapterVenueMZROverride,
-0x89 => ChapterVenues,
-0x8a => ChapterStorefronts,
-0x8b => ChapterLowResBorderBuildings,
-0x8c => ChapterBorderBuildingMeshes,
-0x8d => ChapterLabelPlacementMetadata,
-0x8e => ChapterDaVinciBuildings,
-0x90 => ChapterPointFeaturesAddendum,
-0x91 => ChapterLinesExtended,
-0x92 => ChapterTrafficSkeleton1,
-0x93 => ChapterDaVinciLandmarks,
-0x94 => ChapterLineWidths1,
-0x95 => ChapterPointLabelAnnotations,
-0x97 => ChapterPOIMzrOverrides,
-0x98 => ChapterTrafficSkeleton2,
-0x99 => ChapterLineWidths2,
-0x9a => ChapterStyleAttributeRaster2,
-0x9b => ChapterMaterialRaster,
+0x09 => Vmp4SectionType::ChapterLabels,
+0x0a => Vmp4SectionType::ChapterLabelLanguages,
+0x0c => Vmp4SectionType::ChapterLabelLocalizations2,
+0x13 => Vmp4SectionType::ChapterVertices,
+0x1d => Vmp4SectionType::ChapterPointFeatures,
+0x1e => Vmp4SectionType::ChapterLineFeatures,
+0x1f => Vmp4SectionType::ChapterPolygonFeatures,
+0x20 => Vmp4SectionType::ChapterBuildingFeatures,
+0x21 => Vmp4SectionType::ChapterCoastlineFeatures,
+0x25 => Vmp4SectionType::ChapterWrappingCoastlineFeatures,
+0x26 => Vmp4SectionType::ChapterBuildingMeshes,
+0x32 => Vmp4SectionType::ChapterLinePointCharacteristics,
+0x33 => Vmp4SectionType::ChapterPolygonPointCharacteristics,
+0x36 => Vmp4SectionType::ChapterPolygonPointLabelPositions,
+0x3b => Vmp4SectionType::ChapterConnectivity,
+0x4f => Vmp4SectionType::ChapterGeoIDSegments,
+0x59 => Vmp4SectionType::ChapterAddressRanges,
+0x5c => Vmp4SectionType::ChapterTileReferences,
+0x5f => Vmp4SectionType::ChapterHighResBuildings,
+0x63 => Vmp4SectionType::ChapterDebugBlob,
+0x64 => Vmp4SectionType::ChapterElevationRaster,
+0x65 => Vmp4SectionType::ChapterStyleAttributeRaster,
+0x66 => Vmp4SectionType::ChapterDaVinciMetadata,
+0x67 => Vmp4SectionType::ChapterLowResBuildings,
+0x6f => Vmp4SectionType::ChapterTransitMZROverride,
+0x76 => Vmp4SectionType::ChapterCoverage,
+0x7f => Vmp4SectionType::ChapterTransitSystems,
+0x80 => Vmp4SectionType::ChapterTransitNetwork,
+0x86 => Vmp4SectionType::ChapterRoadNetwork,
+0x87 => Vmp4SectionType::ChapterVenueMZROverride,
+0x88 => Vmp4SectionType::ChapterVenues,
+0x89 => Vmp4SectionType::ChapterStorefronts,
+0x8a => Vmp4SectionType::ChapterLowResBorderBuildings,
+0x8b => Vmp4SectionType::ChapterBorderBuildingMeshes,
+0x8c => Vmp4SectionType::ChapterLabelPlacementMetadata,
+0x8d => Vmp4SectionType::ChapterDaVinciBuildings,
+0x8f => Vmp4SectionType::ChapterPointFeaturesAddendum,
+0x90 => Vmp4SectionType::ChapterLinesExtended,
+0x91 => Vmp4SectionType::ChapterTrafficSkeleton1,
+0x92 => Vmp4SectionType::ChapterDaVinciLandmarks,
+0x93 => Vmp4SectionType::ChapterLineWidths1,
+0x94 => Vmp4SectionType::ChapterPointLabelAnnotations,
+0x96 => Vmp4SectionType::ChapterPOIMzrOverrides,
+0x97 => Vmp4SectionType::ChapterTrafficSkeleton2,
+0x98 => Vmp4SectionType::ChapterLineWidths2,
+0x99 => Vmp4SectionType::ChapterStyleAttributeRaster2,
+0x9a => Vmp4SectionType::ChapterMaterialRaster,
+0x9b => Vmp4SectionType::ChapterDaVinciAssetMetadata,
+0x9c => Vmp4SectionType::ChapterRunningTracks,
+0x9d => Vmp4SectionType::ChapterHikingHillShadeRaster,
+0x9e => Vmp4SectionType::ChapterLiveFeatures,
+0x9f => Vmp4SectionType::ChapterAnnotationLabels,
+0xa0 => Vmp4SectionType::ChapterContourLinesFeet,
+0xa1 => Vmp4SectionType::ChapterSupplementalFeatureIDs,
+0xa3 => Vmp4SectionType::ChapterContourLinesMeters,
+0xa4 => Vmp4SectionType::ChapterLiveFeaturesMetadatas,
+0xa7 => Vmp4SectionType::ChapterRegionMetadata,
+0xa8 => Vmp4SectionType::ChapterCompressedPolygons,
 ```
 
 #### License
 
 ~~ MIT License ~~
 
-Copyright (c) 2022 Kenan Sulayman
+Copyright (c) 2022 - 2024 Kenan Sulayman
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

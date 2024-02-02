@@ -13,6 +13,12 @@ mod vmp4_section_print;
 mod types;
 mod sections;
 
+const MOTD: &str = r#"
+┬  ┬┌┬┐┌─┐ 4
+└┐┌┘│││├─┘
+ └┘ ┴ ┴┴   dump
+"#;
+
 fn main() -> std::io::Result<()> {
     let matches = Command::new("ftab-dump")
         .version(env!("CARGO_PKG_VERSION"))
@@ -21,11 +27,13 @@ fn main() -> std::io::Result<()> {
         .arg(Arg::new("dump")
             .short('d')
             .long("dump")
+            .required(false)
             .action(ArgAction::SetTrue)
             .help("Dump vmp4 sections to file (<vmp4-file>-offset.bin)"))
         .arg(Arg::new("verbose")
             .short('v')
             .long("verbose")
+            .required(false)
             .action(ArgAction::SetTrue)
             .help("Don't truncate section data"))
         .arg(Arg::new("VMP4_FILE")
@@ -34,10 +42,12 @@ fn main() -> std::io::Result<()> {
             .index(1))
         .get_matches();
 
+    println!("{}", MOTD);
+
     let fw_path = matches.get_one::<String>("VMP4_FILE").unwrap();
 
-    let dump = matches.get_flag("dump");
-    let verbose = matches.get_flag("verbose");
+    let dump = *matches.get_one::<bool>("dump").unwrap();
+    let verbose = *matches.get_one::<bool>("verbose").unwrap();
 
     let mut fw_buf = match std::fs::File::open(fw_path) {
         Ok(buf) => buf,
@@ -68,17 +78,33 @@ fn main() -> std::io::Result<()> {
             println!("original size: {:?}", section.data.original_size);
         }
 
-        println!();
+        if verbose {
+            println!();
 
-        vmp4_section_print::print_section_data(
-            &section.data.buf,
-            &section.envelope,
-            verbose,
-        );
+            vmp4_section_print::print_section_data(
+                &section.data.buf,
+                &section.envelope,
+                verbose,
+            );
+        }
 
         if dump {
+            let out_file =
+                format!(
+                    "{}-{:#08x}-{:?}.bin",
+                    fw_path,
+                    section.offset,
+                    section.section_type,
+                );
+
+            println!();
+            println!(
+                "dumping section to file: {} ..",
+                &out_file,
+            );
+
             std::fs::write(
-                Path::new(&format!("{}-{}.bin", fw_path, section.offset)),
+                Path::new(&out_file),
                 &section.data.buf,
             )?;
         }
