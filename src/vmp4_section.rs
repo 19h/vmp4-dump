@@ -2,8 +2,10 @@ use byteorder::{LittleEndian, ReadBytesExt};
 
 use crate::buildings::{BuildingFeatures, BuildingMeshSection, DaVinciMetadata};
 use crate::characteristics::{LinePointCharacteristics, PolygonPointCharacteristics};
+use crate::coastline::{ChapterCoastlineFeatures, ChapterWrappingCoastlineFeatures};
 use crate::connectivity::ChapterConnectivity;
 use crate::elevation::{decode_elevation_raster, ElevationRaster};
+use crate::labels::LabelPlacementMetadata;
 use crate::sections::chapterlabel::ChapterLabels;
 use crate::sections::chapterlabellanguages::ChapterLabelLanguages;
 use crate::sections::features::{
@@ -14,6 +16,7 @@ use crate::sections::section::SectionParser;
 use crate::sections::vertices::ChapterVertices;
 use crate::transit::{TransitNetwork, TransitSystems};
 use crate::types::{parse_section_type, Vmp4SectionType};
+use crate::venues::ChapterVenues;
 use crate::vmp4_parser::Vmp4Data;
 
 #[derive(Debug)]
@@ -34,6 +37,10 @@ pub enum Vmp4SectionData {
     ChapterLinePointCharacteristics(LinePointCharacteristics),
     ChapterPolygonPointCharacteristics(PolygonPointCharacteristics),
     ChapterConnectivity(ChapterConnectivity),
+    ChapterCoastlineFeatures(ChapterCoastlineFeatures),
+    ChapterWrappingCoastlineFeatures(ChapterWrappingCoastlineFeatures),
+    ChapterLabelPlacementMetadata(LabelPlacementMetadata),
+    ChapterVenues(ChapterVenues),
 }
 
 impl Vmp4SectionData {
@@ -61,6 +68,10 @@ impl Vmp4SectionData {
             Vmp4SectionData::ChapterLinePointCharacteristics(data) => data.print(),
             Vmp4SectionData::ChapterPolygonPointCharacteristics(data) => data.print(),
             Vmp4SectionData::ChapterConnectivity(data) => data.print(),
+            Vmp4SectionData::ChapterCoastlineFeatures(data) => data.print(),
+            Vmp4SectionData::ChapterWrappingCoastlineFeatures(data) => data.print(),
+            Vmp4SectionData::ChapterLabelPlacementMetadata(data) => data.print(),
+            Vmp4SectionData::ChapterVenues(data) => data.print(),
         }
     }
 }
@@ -131,6 +142,24 @@ impl Vmp4Section {
             Vmp4SectionType::ChapterConnectivity => ChapterConnectivity::parse(&section_data.buf)
                 .ok()
                 .map(Vmp4SectionData::ChapterConnectivity),
+            Vmp4SectionType::ChapterCoastlineFeatures => {
+                ChapterCoastlineFeatures::parse(&section_data.buf)
+                    .ok()
+                    .map(Vmp4SectionData::ChapterCoastlineFeatures)
+            }
+            Vmp4SectionType::ChapterWrappingCoastlineFeatures => {
+                ChapterWrappingCoastlineFeatures::parse(&section_data.buf)
+                    .ok()
+                    .map(Vmp4SectionData::ChapterWrappingCoastlineFeatures)
+            }
+            Vmp4SectionType::ChapterLabelPlacementMetadata => {
+                LabelPlacementMetadata::parse(&section_data.buf)
+                    .ok()
+                    .map(Vmp4SectionData::ChapterLabelPlacementMetadata)
+            }
+            Vmp4SectionType::ChapterVenues => ChapterVenues::parse(&section_data.buf)
+                .ok()
+                .map(Vmp4SectionData::ChapterVenues),
             _ => None,
         }
     }
