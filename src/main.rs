@@ -10,6 +10,7 @@ use clap::{Arg, ArgAction, Command};
 mod buildings;
 mod characteristics;
 mod codec;
+mod connectivity;
 mod elevation;
 mod geometry;
 mod sections;

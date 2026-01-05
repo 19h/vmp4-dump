@@ -2,6 +2,7 @@ use byteorder::{LittleEndian, ReadBytesExt};
 
 use crate::buildings::{BuildingFeatures, BuildingMeshSection, DaVinciMetadata};
 use crate::characteristics::{LinePointCharacteristics, PolygonPointCharacteristics};
+use crate::connectivity::ChapterConnectivity;
 use crate::elevation::{decode_elevation_raster, ElevationRaster};
 use crate::sections::chapterlabel::ChapterLabels;
 use crate::sections::chapterlabellanguages::ChapterLabelLanguages;
@@ -32,6 +33,7 @@ pub enum Vmp4SectionData {
     ChapterTransitNetwork(TransitNetwork),
     ChapterLinePointCharacteristics(LinePointCharacteristics),
     ChapterPolygonPointCharacteristics(PolygonPointCharacteristics),
+    ChapterConnectivity(ChapterConnectivity),
 }
 
 impl Vmp4SectionData {
@@ -58,6 +60,7 @@ impl Vmp4SectionData {
             Vmp4SectionData::ChapterTransitNetwork(data) => data.print(),
             Vmp4SectionData::ChapterLinePointCharacteristics(data) => data.print(),
             Vmp4SectionData::ChapterPolygonPointCharacteristics(data) => data.print(),
+            Vmp4SectionData::ChapterConnectivity(data) => data.print(),
         }
     }
 }
@@ -125,6 +128,9 @@ impl Vmp4Section {
                     .ok()
                     .map(Vmp4SectionData::ChapterPolygonPointCharacteristics)
             }
+            Vmp4SectionType::ChapterConnectivity => ChapterConnectivity::parse(&section_data.buf)
+                .ok()
+                .map(Vmp4SectionData::ChapterConnectivity),
             _ => None,
         }
     }
