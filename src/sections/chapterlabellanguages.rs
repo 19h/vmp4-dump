@@ -10,32 +10,25 @@ pub struct ChapterLabelLanguages {
 }
 
 impl SectionParser<ChapterLabelLanguages> for ChapterLabelLanguages {
-    fn parse(
-        section_data: &Vmp4Data,
-    ) -> Option<ChapterLabelLanguages> {
-        let mut cursor =
-            std::io::Cursor::new(
-                &section_data.buf,
-            );
+    fn parse(section_data: &Vmp4Data) -> Option<ChapterLabelLanguages> {
+        let mut cursor = std::io::Cursor::new(&section_data.buf);
 
         let count = cursor.read_u16::<LittleEndian>().ok()?;
 
-        let languages =
-            (0..count)
-                .map(|_| {
-                    let mut buf = [0u8].repeat(3);
+        let languages = (0..count)
+            .filter_map(|_| {
+                let mut buf = [0u8; 3];
+                if cursor.read_exact(&mut buf).is_err() {
+                    return None;
+                }
+                // Try to parse as UTF-8, falling back to lossy conversion
+                String::from_utf8(buf.to_vec())
+                    .ok()
+                    .or_else(|| Some(String::from_utf8_lossy(&buf).to_string()))
+            })
+            .collect::<Vec<String>>();
 
-                    cursor.read(&mut *buf).unwrap();
-
-                    String::from_utf8(buf).unwrap()
-                })
-                .collect::<Vec<String>>();
-
-        Some(
-            ChapterLabelLanguages {
-                languages,
-            },
-        )
+        Some(ChapterLabelLanguages { languages })
     }
 
     fn print(&self) {

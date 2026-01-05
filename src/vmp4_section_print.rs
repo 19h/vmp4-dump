@@ -1,6 +1,3 @@
-use crate::sections::chapterlabel::ChapterLabels;
-use crate::types::Vmp4SectionType;
-use crate::vmp4_section;
 use crate::vmp4_section::Vmp4SectionData;
 
 pub fn print_section_data(
@@ -11,7 +8,7 @@ pub fn print_section_data(
     if section_envelope.is_none() {
         let mut dumper = Vec::new();
 
-        hxdmp::hexdump(
+        let _ = hxdmp::hexdump(
             if verbose {
                 &section_data
             } else {
@@ -30,11 +27,7 @@ pub fn print_section_data(
         return;
     }
 
-    section_envelope
-        .as_ref()
-        .map(|envelope|
-            envelope.print(),
-        );
-
-    return;
+    if let Some(envelope) = section_envelope.as_ref() {
+        envelope.print();
+    }
 }

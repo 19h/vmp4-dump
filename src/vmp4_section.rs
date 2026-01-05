@@ -2,25 +2,36 @@ use byteorder::{LittleEndian, ReadBytesExt};
 
 use crate::sections::chapterlabel::ChapterLabels;
 use crate::sections::chapterlabellanguages::ChapterLabelLanguages;
+use crate::sections::features::{
+    ChapterLineFeatures, ChapterPointFeatures, ChapterPolygonFeatures,
+};
+use crate::sections::global::ChapterGlobal;
 use crate::sections::section::SectionParser;
+use crate::sections::vertices::ChapterVertices;
 use crate::types::{parse_section_type, Vmp4SectionType};
 use crate::vmp4_parser::Vmp4Data;
 
 #[derive(Debug)]
 pub enum Vmp4SectionData {
+    ChapterGlobal(ChapterGlobal),
     ChapterLabels(ChapterLabels),
     ChapterLabelLanguages(ChapterLabelLanguages),
+    ChapterVertices(ChapterVertices),
+    ChapterPointFeatures(ChapterPointFeatures),
+    ChapterLineFeatures(ChapterLineFeatures),
+    ChapterPolygonFeatures(ChapterPolygonFeatures),
 }
 
 impl Vmp4SectionData {
     pub fn print(&self) {
         match self {
-            Vmp4SectionData::ChapterLabels(
-                chapter_labels,
-            ) => chapter_labels.print(),
-            Vmp4SectionData::ChapterLabelLanguages(
-                chapter_label_languages,
-            ) => chapter_label_languages.print(),
+            Vmp4SectionData::ChapterGlobal(data) => data.print(),
+            Vmp4SectionData::ChapterLabels(data) => data.print(),
+            Vmp4SectionData::ChapterLabelLanguages(data) => data.print(),
+            Vmp4SectionData::ChapterVertices(data) => data.print(),
+            Vmp4SectionData::ChapterPointFeatures(data) => data.print(),
+            Vmp4SectionData::ChapterLineFeatures(data) => data.print(),
+            Vmp4SectionData::ChapterPolygonFeatures(data) => data.print(),
         }
     }
 }
@@ -41,17 +52,26 @@ impl Vmp4Section {
         section_data: &Vmp4Data,
     ) -> Option<Vmp4SectionData> {
         match section_type {
-            Vmp4SectionType::ChapterLabels =>
-                ChapterLabels::parse(section_data)
-                    .map(|val|
-                        Vmp4SectionData::ChapterLabels(val),
-                    ),
-            Vmp4SectionType::ChapterLabelLanguages =>
-                ChapterLabelLanguages::parse(section_data)
-                    .map(|val|
-                        Vmp4SectionData::ChapterLabelLanguages(val),
-                    ),
-            _ => None
+            Vmp4SectionType::ChapterGlobal => {
+                ChapterGlobal::parse(section_data).map(Vmp4SectionData::ChapterGlobal)
+            }
+            Vmp4SectionType::ChapterLabels => {
+                ChapterLabels::parse(section_data).map(Vmp4SectionData::ChapterLabels)
+            }
+            Vmp4SectionType::ChapterLabelLanguages => ChapterLabelLanguages::parse(section_data)
+                .map(Vmp4SectionData::ChapterLabelLanguages),
+            Vmp4SectionType::ChapterVertices => {
+                ChapterVertices::parse(section_data).map(Vmp4SectionData::ChapterVertices)
+            }
+            Vmp4SectionType::ChapterPointFeatures => {
+                ChapterPointFeatures::parse(section_data).map(Vmp4SectionData::ChapterPointFeatures)
+            }
+            Vmp4SectionType::ChapterLineFeatures => {
+                ChapterLineFeatures::parse(section_data).map(Vmp4SectionData::ChapterLineFeatures)
+            }
+            Vmp4SectionType::ChapterPolygonFeatures => ChapterPolygonFeatures::parse(section_data)
+                .map(Vmp4SectionData::ChapterPolygonFeatures),
+            _ => None,
         }
     }
 
@@ -73,26 +93,18 @@ impl Vmp4Section {
             src.seek(std::io::SeekFrom::Start(offset as u64))?;
             src.read(&mut *data)?;
 
-            Vmp4Data::parse(
-                &data,
-            )?
+            Vmp4Data::parse(&data)?
         };
 
-        let envelope =
-            Vmp4Section::parse_section(
-                section_type,
-                &data,
-            );
+        let envelope = Vmp4Section::parse_section(section_type, &data);
 
-        Ok(
-            Vmp4Section {
-                section_type,
-                type_id,
-                offset,
-                size,
-                data,
-                envelope,
-            }
-        )
+        Ok(Vmp4Section {
+            section_type,
+            type_id,
+            offset,
+            size,
+            data,
+            envelope,
+        })
     }
 }
