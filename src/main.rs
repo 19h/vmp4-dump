@@ -7,9 +7,13 @@ use std::path::Path;
 
 use clap::{Arg, ArgAction, Command};
 
+mod buildings;
+mod characteristics;
 mod codec;
+mod elevation;
 mod geometry;
 mod sections;
+mod transit;
 mod types;
 mod vmp4_parser;
 mod vmp4_section;

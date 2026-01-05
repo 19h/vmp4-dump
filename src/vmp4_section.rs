@@ -1,5 +1,8 @@
 use byteorder::{LittleEndian, ReadBytesExt};
 
+use crate::buildings::{BuildingFeatures, BuildingMeshSection, DaVinciMetadata};
+use crate::characteristics::{LinePointCharacteristics, PolygonPointCharacteristics};
+use crate::elevation::{decode_elevation_raster, ElevationRaster};
 use crate::sections::chapterlabel::ChapterLabels;
 use crate::sections::chapterlabellanguages::ChapterLabelLanguages;
 use crate::sections::features::{
@@ -8,6 +11,7 @@ use crate::sections::features::{
 use crate::sections::global::ChapterGlobal;
 use crate::sections::section::SectionParser;
 use crate::sections::vertices::ChapterVertices;
+use crate::transit::{TransitNetwork, TransitSystems};
 use crate::types::{parse_section_type, Vmp4SectionType};
 use crate::vmp4_parser::Vmp4Data;
 
@@ -20,6 +24,14 @@ pub enum Vmp4SectionData {
     ChapterPointFeatures(ChapterPointFeatures),
     ChapterLineFeatures(ChapterLineFeatures),
     ChapterPolygonFeatures(ChapterPolygonFeatures),
+    ChapterBuildingFeatures(BuildingFeatures),
+    ChapterBuildingMeshes(BuildingMeshSection),
+    ChapterElevationRaster(ElevationRaster),
+    ChapterDaVinciMetadata(DaVinciMetadata),
+    ChapterTransitSystems(TransitSystems),
+    ChapterTransitNetwork(TransitNetwork),
+    ChapterLinePointCharacteristics(LinePointCharacteristics),
+    ChapterPolygonPointCharacteristics(PolygonPointCharacteristics),
 }
 
 impl Vmp4SectionData {
@@ -32,6 +44,20 @@ impl Vmp4SectionData {
             Vmp4SectionData::ChapterPointFeatures(data) => data.print(),
             Vmp4SectionData::ChapterLineFeatures(data) => data.print(),
             Vmp4SectionData::ChapterPolygonFeatures(data) => data.print(),
+            Vmp4SectionData::ChapterBuildingFeatures(data) => data.print(),
+            Vmp4SectionData::ChapterBuildingMeshes(data) => data.print(),
+            Vmp4SectionData::ChapterElevationRaster(data) => {
+                println!("  Elevation Raster: {}x{}", data.width, data.height);
+                println!(
+                    "    Range: {:.1}m - {:.1}m",
+                    data.min_elevation, data.max_elevation
+                );
+            }
+            Vmp4SectionData::ChapterDaVinciMetadata(data) => data.print(),
+            Vmp4SectionData::ChapterTransitSystems(data) => data.print(),
+            Vmp4SectionData::ChapterTransitNetwork(data) => data.print(),
+            Vmp4SectionData::ChapterLinePointCharacteristics(data) => data.print(),
+            Vmp4SectionData::ChapterPolygonPointCharacteristics(data) => data.print(),
         }
     }
 }
@@ -71,6 +97,34 @@ impl Vmp4Section {
             }
             Vmp4SectionType::ChapterPolygonFeatures => ChapterPolygonFeatures::parse(section_data)
                 .map(Vmp4SectionData::ChapterPolygonFeatures),
+            Vmp4SectionType::ChapterBuildingFeatures => BuildingFeatures::parse(&section_data.buf)
+                .ok()
+                .map(Vmp4SectionData::ChapterBuildingFeatures),
+            Vmp4SectionType::ChapterBuildingMeshes => BuildingMeshSection::parse(&section_data.buf)
+                .ok()
+                .map(Vmp4SectionData::ChapterBuildingMeshes),
+            Vmp4SectionType::ChapterElevationRaster => decode_elevation_raster(&section_data.buf)
+                .ok()
+                .map(Vmp4SectionData::ChapterElevationRaster),
+            Vmp4SectionType::ChapterDaVinciMetadata => DaVinciMetadata::parse(&section_data.buf)
+                .ok()
+                .map(Vmp4SectionData::ChapterDaVinciMetadata),
+            Vmp4SectionType::ChapterTransitSystems => TransitSystems::parse(&section_data.buf)
+                .ok()
+                .map(Vmp4SectionData::ChapterTransitSystems),
+            Vmp4SectionType::ChapterTransitNetwork => TransitNetwork::parse(&section_data.buf)
+                .ok()
+                .map(Vmp4SectionData::ChapterTransitNetwork),
+            Vmp4SectionType::ChapterLinePointCharacteristics => {
+                LinePointCharacteristics::parse(&section_data.buf)
+                    .ok()
+                    .map(Vmp4SectionData::ChapterLinePointCharacteristics)
+            }
+            Vmp4SectionType::ChapterPolygonPointCharacteristics => {
+                PolygonPointCharacteristics::parse(&section_data.buf)
+                    .ok()
+                    .map(Vmp4SectionData::ChapterPolygonPointCharacteristics)
+            }
             _ => None,
         }
     }
