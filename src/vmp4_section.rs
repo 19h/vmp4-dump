@@ -1,11 +1,13 @@
 use byteorder::{LittleEndian, ReadBytesExt};
 
+use crate::bounds::CoordinateBounds;
 use crate::buildings::{BuildingFeatures, BuildingMeshSection, DaVinciMetadata};
 use crate::characteristics::{LinePointCharacteristics, PolygonPointCharacteristics};
 use crate::coastline::{ChapterCoastlineFeatures, ChapterWrappingCoastlineFeatures};
 use crate::connectivity::ChapterConnectivity;
 use crate::elevation::{decode_elevation_raster, ElevationRaster};
 use crate::labels::LabelPlacementMetadata;
+use crate::poi::PoiData;
 use crate::sections::chapterlabel::ChapterLabels;
 use crate::sections::chapterlabellanguages::ChapterLabelLanguages;
 use crate::sections::features::{
@@ -41,6 +43,10 @@ pub enum Vmp4SectionData {
     ChapterWrappingCoastlineFeatures(ChapterWrappingCoastlineFeatures),
     ChapterLabelPlacementMetadata(LabelPlacementMetadata),
     ChapterVenues(ChapterVenues),
+    /// Coordinate bounds from sections 0x1E/0x02
+    CoordinateBounds(CoordinateBounds),
+    /// POI data from sections 0x28/0x32/0x46/0x50
+    PoiData(PoiData),
 }
 
 impl Vmp4SectionData {
@@ -72,6 +78,38 @@ impl Vmp4SectionData {
             Vmp4SectionData::ChapterWrappingCoastlineFeatures(data) => data.print(),
             Vmp4SectionData::ChapterLabelPlacementMetadata(data) => data.print(),
             Vmp4SectionData::ChapterVenues(data) => data.print(),
+            Vmp4SectionData::CoordinateBounds(data) => {
+                let (center_lat, center_lon) = data.center();
+                println!("  Coordinate Bounds:");
+                println!("    Lat: {:.6} to {:.6}", data.lat_min, data.lat_max);
+                println!("    Lon: {:.6} to {:.6}", data.lon_min, data.lon_max);
+                println!("    Center: ({:.6}, {:.6})", center_lat, center_lon);
+                println!("    Coverage: {:.2} km²", data.coverage_km2());
+            }
+            Vmp4SectionData::PoiData(data) => {
+                println!("  POI Data (section 0x{:02X}):", data.source_section);
+                if !data.names.is_empty() {
+                    println!("    Names ({}):", data.names.len());
+                    for name in data.names.iter().take(5) {
+                        println!("      - {}", name);
+                    }
+                    if data.names.len() > 5 {
+                        println!("      ... and {} more", data.names.len() - 5);
+                    }
+                }
+                if !data.addresses.is_empty() {
+                    println!("    Addresses ({}):", data.addresses.len());
+                    for addr in data.addresses.iter().take(3) {
+                        println!("      - {}", addr);
+                    }
+                }
+                if !data.phone_numbers.is_empty() {
+                    println!("    Phone numbers: {}", data.phone_numbers.len());
+                }
+                if !data.urls.is_empty() {
+                    println!("    URLs: {}", data.urls.len());
+                }
+            }
         }
     }
 }
@@ -87,6 +125,28 @@ pub struct Vmp4Section {
 }
 
 impl Vmp4Section {
+    /// Try to parse a section based on its raw type_id
+    /// This handles sections that don't have a named Vmp4SectionType
+    pub fn parse_by_type_id(type_id: u16, section_data: &Vmp4Data) -> Option<Vmp4SectionData> {
+        // Coordinate bounds sections
+        if type_id == 0x1E || type_id == 0x02 {
+            if let Some(bounds) = crate::bounds::parse_coordinate_bounds(&section_data.buf, type_id)
+            {
+                return Some(Vmp4SectionData::CoordinateBounds(bounds));
+            }
+        }
+
+        // POI sections
+        if crate::poi::POI_SECTIONS.contains(&type_id) {
+            let poi = crate::poi::extract_poi_data(&section_data.buf, type_id);
+            if !poi.is_empty() {
+                return Some(Vmp4SectionData::PoiData(poi));
+            }
+        }
+
+        None
+    }
+
     pub fn parse_section(
         section_type: Vmp4SectionType,
         section_data: &Vmp4Data,
@@ -164,6 +224,21 @@ impl Vmp4Section {
         }
     }
 
+    /// Parse section, trying both named types and raw type_id
+    pub fn parse_section_full(
+        section_type: Vmp4SectionType,
+        type_id: u16,
+        section_data: &Vmp4Data,
+    ) -> Option<Vmp4SectionData> {
+        // First try parsing by known section type
+        if let Some(data) = Self::parse_section(section_type, section_data) {
+            return Some(data);
+        }
+
+        // For unknown sections or fallback, try parsing by raw type_id
+        Self::parse_by_type_id(type_id, section_data)
+    }
+
     pub fn parse<R: std::io::Read + std::io::Seek>(
         src: &mut R,
         section_header: &[u8],
@@ -185,7 +260,7 @@ impl Vmp4Section {
             Vmp4Data::parse(&data)?
         };
 
-        let envelope = Vmp4Section::parse_section(section_type, &data);
+        let envelope = Vmp4Section::parse_section_full(section_type, type_id, &data);
 
         Ok(Vmp4Section {
             section_type,

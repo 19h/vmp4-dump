@@ -72,6 +72,177 @@ pub enum Vmp4SectionType {
     Unknown,
 }
 
+impl Vmp4SectionType {
+    /// Returns a human-readable description of the section type
+    pub fn description(&self) -> &'static str {
+        match self {
+            Vmp4SectionType::ChapterGlobal => "Header/Metadata",
+            Vmp4SectionType::ChapterLabels => "Place Names",
+            Vmp4SectionType::ChapterLabelLanguages => "Language/Localization",
+            Vmp4SectionType::ChapterLabelLocalizations2 => "Extended Localization",
+            Vmp4SectionType::ChapterVertices => "Geometry Data",
+            Vmp4SectionType::ChapterPointFeatures => "Point Features",
+            Vmp4SectionType::ChapterLineFeatures => "Line Features (Roads/Paths)",
+            Vmp4SectionType::ChapterPolygonFeatures => "Polygon Features (Areas)",
+            Vmp4SectionType::ChapterBuildingFeatures => "Building Data",
+            Vmp4SectionType::ChapterCoastlineFeatures => "Coastline Data",
+            Vmp4SectionType::ChapterWrappingCoastlineFeatures => "Wrapping Coastline Data",
+            Vmp4SectionType::ChapterBuildingMeshes => "Building 3D Meshes",
+            Vmp4SectionType::ChapterLinePointCharacteristics => "Line Point Characteristics",
+            Vmp4SectionType::ChapterPolygonPointCharacteristics => "Polygon Point Characteristics",
+            Vmp4SectionType::ChapterPolygonPointLabelPositions => "Polygon Label Positions",
+            Vmp4SectionType::ChapterConnectivity => "Road Network Connectivity",
+            Vmp4SectionType::ChapterGeoIDSegments => "Geographic ID Segments",
+            Vmp4SectionType::ChapterAddressRanges => "Address Range Data",
+            Vmp4SectionType::ChapterTileReferences => "Tile References",
+            Vmp4SectionType::ChapterHighResBuildings => "High-Res Building Data",
+            Vmp4SectionType::ChapterDebugBlob => "Debug Information",
+            Vmp4SectionType::ChapterElevationRaster => "Elevation Data",
+            Vmp4SectionType::ChapterStyleAttributeRaster => "Style Attributes",
+            Vmp4SectionType::ChapterDaVinciMetadata => "DaVinci Metadata",
+            Vmp4SectionType::ChapterLowResBuildings => "Low-Res Building Data",
+            Vmp4SectionType::ChapterTransitMZROverride => "Transit MZR Override",
+            Vmp4SectionType::ChapterCoverage => "Coverage Data",
+            Vmp4SectionType::ChapterTransitSystems => "Transit Systems",
+            Vmp4SectionType::ChapterTransitNetwork => "Transit Network",
+            Vmp4SectionType::ChapterRoadNetwork => "Road Network Data",
+            Vmp4SectionType::ChapterVenueMZROverride => "Venue MZR Override",
+            Vmp4SectionType::ChapterVenues => "Venue/POI Data",
+            Vmp4SectionType::ChapterStorefronts => "Storefront Data",
+            Vmp4SectionType::ChapterLowResBorderBuildings => "Low-Res Border Buildings",
+            Vmp4SectionType::ChapterBorderBuildingMeshes => "Border Building Meshes",
+            Vmp4SectionType::ChapterLabelPlacementMetadata => "Label Placement Metadata",
+            Vmp4SectionType::ChapterDaVinciBuildings => "DaVinci Buildings",
+            Vmp4SectionType::ChapterPointFeaturesAddendum => "Point Features Addendum",
+            Vmp4SectionType::ChapterLinesExtended => "Extended Line Data",
+            Vmp4SectionType::ChapterTrafficSkeleton1 => "Traffic Skeleton (Primary)",
+            Vmp4SectionType::ChapterDaVinciLandmarks => "DaVinci Landmarks",
+            Vmp4SectionType::ChapterLineWidths1 => "Line Widths (Primary)",
+            Vmp4SectionType::ChapterPointLabelAnnotations => "Point Label Annotations",
+            Vmp4SectionType::ChapterPOIMzrOverrides => "POI MZR Overrides",
+            Vmp4SectionType::ChapterTrafficSkeleton2 => "Traffic Skeleton (Secondary)",
+            Vmp4SectionType::ChapterLineWidths2 => "Line Widths (Secondary)",
+            Vmp4SectionType::ChapterStyleAttributeRaster2 => "Style Attributes (Secondary)",
+            Vmp4SectionType::ChapterMaterialRaster => "Material Raster Data",
+            Vmp4SectionType::ChapterDaVinciAssetMetadata => "DaVinci Asset Metadata",
+            Vmp4SectionType::ChapterRunningTracks => "Running Track Data",
+            Vmp4SectionType::ChapterHikingHillShadeRaster => "Hiking/Hillshade Raster",
+            Vmp4SectionType::ChapterLiveFeatures => "Live Features",
+            Vmp4SectionType::ChapterAnnotationLabels => "Annotation Labels",
+            Vmp4SectionType::ChapterContourLinesFeet => "Contour Lines (Feet)",
+            Vmp4SectionType::ChapterSupplementalFeatureIDs => "Supplemental Feature IDs",
+            Vmp4SectionType::ChapterContourLinesMeters => "Contour Lines (Meters)",
+            Vmp4SectionType::ChapterLiveFeaturesMetadatas => "Live Features Metadata",
+            Vmp4SectionType::ChapterRegionMetadata => "Region Metadata",
+            Vmp4SectionType::ChapterCompressedPolygons => "Compressed Polygon Data",
+            Vmp4SectionType::Unknown => "Unknown Section",
+        }
+    }
+
+    /// Returns a short category for grouping section types
+    pub fn category(&self) -> &'static str {
+        match self {
+            Vmp4SectionType::ChapterGlobal => "metadata",
+            Vmp4SectionType::ChapterLabels
+            | Vmp4SectionType::ChapterLabelLanguages
+            | Vmp4SectionType::ChapterLabelLocalizations2
+            | Vmp4SectionType::ChapterLabelPlacementMetadata
+            | Vmp4SectionType::ChapterPointLabelAnnotations
+            | Vmp4SectionType::ChapterAnnotationLabels => "labels",
+            Vmp4SectionType::ChapterVertices
+            | Vmp4SectionType::ChapterPointFeatures
+            | Vmp4SectionType::ChapterLineFeatures
+            | Vmp4SectionType::ChapterPolygonFeatures
+            | Vmp4SectionType::ChapterPointFeaturesAddendum
+            | Vmp4SectionType::ChapterLinesExtended
+            | Vmp4SectionType::ChapterCompressedPolygons => "geometry",
+            Vmp4SectionType::ChapterBuildingFeatures
+            | Vmp4SectionType::ChapterBuildingMeshes
+            | Vmp4SectionType::ChapterHighResBuildings
+            | Vmp4SectionType::ChapterLowResBuildings
+            | Vmp4SectionType::ChapterLowResBorderBuildings
+            | Vmp4SectionType::ChapterBorderBuildingMeshes
+            | Vmp4SectionType::ChapterDaVinciBuildings => "buildings",
+            Vmp4SectionType::ChapterCoastlineFeatures
+            | Vmp4SectionType::ChapterWrappingCoastlineFeatures => "coastline",
+            Vmp4SectionType::ChapterLinePointCharacteristics
+            | Vmp4SectionType::ChapterPolygonPointCharacteristics
+            | Vmp4SectionType::ChapterPolygonPointLabelPositions
+            | Vmp4SectionType::ChapterLineWidths1
+            | Vmp4SectionType::ChapterLineWidths2 => "characteristics",
+            Vmp4SectionType::ChapterConnectivity
+            | Vmp4SectionType::ChapterRoadNetwork
+            | Vmp4SectionType::ChapterTrafficSkeleton1
+            | Vmp4SectionType::ChapterTrafficSkeleton2 => "roads",
+            Vmp4SectionType::ChapterTransitSystems
+            | Vmp4SectionType::ChapterTransitNetwork
+            | Vmp4SectionType::ChapterTransitMZROverride => "transit",
+            Vmp4SectionType::ChapterVenues
+            | Vmp4SectionType::ChapterStorefronts
+            | Vmp4SectionType::ChapterVenueMZROverride
+            | Vmp4SectionType::ChapterPOIMzrOverrides => "poi",
+            Vmp4SectionType::ChapterElevationRaster
+            | Vmp4SectionType::ChapterStyleAttributeRaster
+            | Vmp4SectionType::ChapterStyleAttributeRaster2
+            | Vmp4SectionType::ChapterMaterialRaster
+            | Vmp4SectionType::ChapterHikingHillShadeRaster => "raster",
+            Vmp4SectionType::ChapterDaVinciMetadata
+            | Vmp4SectionType::ChapterDaVinciLandmarks
+            | Vmp4SectionType::ChapterDaVinciAssetMetadata => "davinci",
+            Vmp4SectionType::ChapterContourLinesFeet
+            | Vmp4SectionType::ChapterContourLinesMeters => "contours",
+            _ => "other",
+        }
+    }
+}
+
+/// Get a human-readable description for a raw section type ID
+pub fn section_type_description(type_id: u16) -> &'static str {
+    // Map raw type IDs to descriptions (before the -1 transformation in parse_section_type)
+    match type_id {
+        0x01 => "Header/Metadata",
+        0x0A => "Place Names",
+        0x0B => "Language Info",
+        0x0D => "Extended Localization",
+        0x14 => "Geometry Vertices",
+        0x1E => "Coordinate Bounds",
+        0x1F => "Additional Geometry",
+        0x20 => "Map Layer Data",
+        0x21 => "Building Features",
+        0x22 => "Coastline Features",
+        0x26 => "Wrapping Coastline",
+        0x27 => "Building Meshes",
+        0x28 => "POI Data (Type A)",
+        0x32 => "POI Data (Type B)",
+        0x33 => "Line Characteristics",
+        0x34 => "Polygon Characteristics",
+        0x46 => "POI Data (Type C)",
+        0x50 => "POI Data (Type D)",
+        0x64 => "Tile Metadata",
+        0x65 => "Elevation Data",
+        0x67 => "Large Tile Data",
+        0x70 => "Transit Data",
+        0x80 => "Transit Systems",
+        0x81 => "Transit Network",
+        0x83 => "Attribution",
+        0x87 => "Road Network",
+        0x89 => "Venues",
+        0x8D => "Label Placement",
+        0x8E => "DaVinci Buildings",
+        0x90 => "Extended Lines",
+        0x91 => "Traffic Data",
+        0x95 => "Transit Override",
+        0x97 => "Environmental Data",
+        0x98 => "Traffic Skeleton",
+        0x9A => "Vector Tile Data",
+        0x9B => "Raster Tile Data",
+        0xA0 => "Contour Lines (ft)",
+        0xA4 => "Contour Lines (m)",
+        0xA7 => "Route Data",
+        _ => "Unknown Section",
+    }
+}
+
 pub fn parse_section_type(tag: u16) -> Vmp4SectionType {
     match tag.max(1u16) - 1u16 {
         0x09 => Vmp4SectionType::ChapterLabels,
