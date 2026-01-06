@@ -5,6 +5,7 @@
 //! feature IDs and basic metadata linking to the main features.
 
 use crate::codec::{Chapter, CodecError, CodecResult};
+use crate::proto;
 
 /// A venue entry in VMP4 tiles
 #[derive(Debug, Clone, Default)]
@@ -25,18 +26,29 @@ pub struct VenueEntry {
 #[derive(Debug, Clone, Default)]
 pub struct ChapterVenues {
     pub venues: Vec<VenueEntry>,
+    /// Raw protobuf venue info if decoded
+    pub venue_info: Option<Vec<String>>,
 }
 
 impl ChapterVenues {
     /// Parse venues from section data.
     ///
-    /// Format appears to be bit-packed venue entries with
-    /// feature ID references.
+    /// The venue data appears to be protobuf-encoded.
+    /// Try protobuf decoding first, fall back to varint parsing.
     pub fn parse(data: &[u8]) -> CodecResult<Self> {
         if data.is_empty() {
             return Ok(Self::default());
         }
 
+        // Try protobuf decoding first
+        if let Some(venue_info) = proto::try_decode_venue(data) {
+            return Ok(ChapterVenues {
+                venues: Vec::new(),
+                venue_info: Some(venue_info.field),
+            });
+        }
+
+        // Fall back to varint-based parsing
         let mut chapter = Chapter::new(data);
         let mut venues = Vec::new();
 
@@ -80,25 +92,39 @@ impl ChapterVenues {
             });
         }
 
-        Ok(ChapterVenues { venues })
+        Ok(ChapterVenues {
+            venues,
+            venue_info: None,
+        })
     }
 
     /// Print summary
     pub fn print(&self) {
-        println!("  Venues ({}):", self.venues.len());
-        for (i, v) in self.venues.iter().take(10).enumerate() {
-            println!(
-                "    [{:3}] id={} cat={} floors={} indoor={} features={}",
-                i,
-                v.venue_id,
-                v.category,
-                v.floor_count,
-                v.has_indoor,
-                v.feature_ids.len()
-            );
-        }
-        if self.venues.len() > 10 {
-            println!("    ... and {} more venues", self.venues.len() - 10);
+        if let Some(ref info) = self.venue_info {
+            println!("  Venues (protobuf decoded):");
+            println!("    Fields ({}):", info.len());
+            for (i, field) in info.iter().take(10).enumerate() {
+                println!("      [{:2}] \"{}\"", i, field);
+            }
+            if info.len() > 10 {
+                println!("      ... and {} more fields", info.len() - 10);
+            }
+        } else {
+            println!("  Venues ({}):", self.venues.len());
+            for (i, v) in self.venues.iter().take(10).enumerate() {
+                println!(
+                    "    [{:3}] id={} cat={} floors={} indoor={} features={}",
+                    i,
+                    v.venue_id,
+                    v.category,
+                    v.floor_count,
+                    v.has_indoor,
+                    v.feature_ids.len()
+                );
+            }
+            if self.venues.len() > 10 {
+                println!("    ... and {} more venues", self.venues.len() - 10);
+            }
         }
     }
 }

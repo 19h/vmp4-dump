@@ -16,6 +16,7 @@ mod elevation;
 mod geojson;
 mod geometry;
 mod labels;
+mod proto;
 mod sections;
 mod transit;
 mod types;
